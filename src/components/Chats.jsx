@@ -35,27 +35,27 @@ const Chats = () => {
             return;
         }
 
-        axios.get('https://api.chatengine/.io/users/me',{
+        axios.get('https://api.chatengine.io/users/me',{
             headers:{
                 "project-id":"00e05c42-6762-4c8d-94af-a30e8ad9b396",
-                "user-name":user.email,
+                "user-name":user && user.email,
                 "user-secret":user.uid
             }
         }).then(()=>setLoading(false)).catch(()=>{
             let formData = new FormData()
-            formData.append('email',user.email)
-            formData.append('username',user.displayName)
+            formData.append('email',user && user.email)
+            formData.append('username',user.email)
             formData.append('secret',user.uid)
 
-            getFile(user.photoUrl).then((avatar)=> {
+            getFile(user.photoURL).then((avatar)=> {
                 formData.append('avatar',avatar,avatar.name)
 
-                axios.post('https://api.chatengine/.io/users',formData,{
+                axios.post('https://api.chatengine.io/users',formData,{
                     headers:{
                         "private-key":"29464037-bd1f-476d-bccc-577479ec708b",
 
                     }
-                })
+                }).then(()=>setLoading(false)).catch((error)=>console.log('error',error))
             })
 
 
@@ -63,6 +63,14 @@ const Chats = () => {
         })
 
     },[])
+
+    if(!user || loading){
+        return(
+            <div>
+                <h1>Loading...</h1>
+            </div>
+        )
+    }
   return (
     <div className='chats-page'>
         <div className="nav-bar">
@@ -74,7 +82,7 @@ const Chats = () => {
             </div>
         </div>
 
-        <ChatEngine  height='calc(100vh -66px)'  projectId="00e05c42-6762-4c8d-94af-a30e8ad9b396" userName='' userSecret="" />
+        <ChatEngine  height='calc(100vh -66px)'  projectID="00e05c42-6762-4c8d-94af-a30e8ad9b396" userName={user && user.email} userSecret={user.uid} />
     </div>
   )
 }
