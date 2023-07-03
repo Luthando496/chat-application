@@ -38,12 +38,12 @@ const Chats = () => {
         axios.get('https://api.chatengine.io/users/me',{
             headers:{
                 "project-id":"00e05c42-6762-4c8d-94af-a30e8ad9b396",
-                "user-name":user && user.email,
+                "user-name":user.email,
                 "user-secret":user.uid
             }
         }).then(()=>setLoading(false)).catch(()=>{
             let formData = new FormData()
-            formData.append('email',user && user.email)
+            formData.append('email',user.email)
             formData.append('username',user.email)
             formData.append('secret',user.uid)
 
@@ -82,7 +82,7 @@ const Chats = () => {
             </div>
         </div>
 
-        <ChatEngine  height='calc(100vh -66px)'  projectID="00e05c42-6762-4c8d-94af-a30e8ad9b396" userName={user && user.email} userSecret={user.uid} />
+        <ChatEngine  height='calc(100vh -66px)'  projectID="00e05c42-6762-4c8d-94af-a30e8ad9b396" userName={user.email} userSecret={user.uid} />
     </div>
   )
 }
